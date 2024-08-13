@@ -31,8 +31,8 @@ export default function Footer() {
                 <div className="w-full md:w-1/4 mb-4 md:mb-0">
                     <h3 className="font-semibold mb-2">Categories</h3>
                     <ul className="text-bodyText">
-                        <li><Link href="#">Men's Fashion</Link></li>
-                        <li><Link href="#">Women's Fashion</Link></li>
+                        <li><Link href="#">Men&apos;s Fashion</Link></li>
+                        <li><Link href="#">Women&apos;s Fashion</Link></li>
                         <li><Link href="#">Kids & Toys</Link></li>
                         <li><Link href="#">Cosmetics</Link></li>
                     </ul>
