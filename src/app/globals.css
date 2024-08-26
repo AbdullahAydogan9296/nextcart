@@ -4,19 +4,12 @@
 
 :root {
   --foreground-rgb: 17, 24, 39;
-  /* primary color */
   --background-start-rgb: 255, 255, 255;
-  /* default background */
   --background-end-rgb: 255, 255, 255;
-  /* default background */
   --vibrant-rgb: 14, 165, 233;
-  /* vibrant color */
   --body-text-rgb: 72, 85, 99;
-  /* body text color */
   --border-rgb: 229, 231, 235;
-  /* border color */
   --gray-bg-rgb: 248, 249, 251;
-  /* gray background */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,5 +30,58 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: rgb(var(--gray-bg-rgb));
+  color: rgb(var(--body-text-rgb));
+  border: none;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: rgb(var(--border-rgb));
+}
+
+.pagination .active {
+  background-color: rgb(var(--border-rgb));
+  color: rgb(var(--foreground-rgb));
+}
+
+.pagination button:focus {
+  outline: none;
+}
+
+.pagination button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 767px) {
+  .sidebar-container {
+    display: none;
   }
 }

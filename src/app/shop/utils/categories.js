@@ -1,0 +1,17 @@
+export const categories = [
+    ["mens-shirts", "Men's Shirts"],
+    ["mens-shoes", "Men's Shoes"],
+    ["mens-watches", "Men's Watches"],
+    ["womens-bags", "Women's Bags"],
+    ["womens-dresses", "Women's Dresses"],
+    ["womens-jewellery", "Women's Jewellery"],
+    ["womens-shoes", "Women's Shoes"],
+    ["womens-watches", "Women's Watches"],
+    ["laptops", "Laptops"],
+    ["mobile-accessories", "Mobile Accessories"],
+    ["smartphones", "Smartphones"],
+    ["tablets", "Tablets"],
+    ["beauty", "Beauty"],
+    ["fragrances", "Fragrances"],
+    ["skin-care", "Skin Care"],
+];
