@@ -19,7 +19,7 @@ const CollectionsSection = () => {
 
                 {/* Men's Fashion Collection */}
                 <div className="collection-item bg-blue-200 p-6 rounded-md">
-                    <h3 className="text-lg font-bold">Men's Fashion</h3>
+                    <h3 className="text-lg font-bold">Men&apos;s Fashion</h3>
                     <p className="text-sm">Starting at $24</p>
                     <button
                         className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
@@ -31,7 +31,7 @@ const CollectionsSection = () => {
 
                 {/* Women's Fashion Collection */}
                 <div className="collection-item bg-purple-200 p-6 rounded-md">
-                    <h3 className="text-lg font-bold">Women's Fashion</h3>
+                    <h3 className="text-lg font-bold">Women&apos;s Fashion</h3>
                     <p className="text-sm">Starting at $19</p>
                     <button
                         className="mt-4 bg-purple-500 text-white px-4 py-2 rounded"

@@ -52,7 +52,7 @@ const TermsOfService = () => {
             <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">7. Changes to These Terms</h2>
                 <p>
-                    We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect.
+                    We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days&apos; notice prior to any new terms taking effect.
                 </p>
             </section>
 
