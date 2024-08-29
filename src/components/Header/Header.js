@@ -4,13 +4,30 @@ import HeaderLogo from './components/HeaderLogo';
 import HeaderSearchBar from './components/HeaderSearchBar';
 import HeaderIcons from './components/HeaderIcons';
 import HeaderMobileMenu from './components/HeaderMobileMenu';
+import { useDispatch } from 'react-redux';
+import { searchProducts } from '@/store/shopSlice';
 
 export default function Header() {
+    // Initialize Redux dispatch function to dispatch actions to the store
+    const dispatch = useDispatch();
+
+    // Function to handle the search input and dispatch the search action
+    const handleSearch = (searchTerm) => {
+        dispatch(searchProducts(searchTerm)); // Dispatch search action with the current search term
+    };
+
     return (
         <header className="bg-primary text-white p-4 flex justify-between items-center">
+            {/* Logo component */}
             <HeaderLogo />
-            <HeaderSearchBar />
+
+            {/* Search bar component with search handler passed as a prop */}
+            <HeaderSearchBar onSearch={handleSearch} />
+
+            {/* Icons for user actions (like cart, profile) */}
             <HeaderIcons />
+
+            {/* Mobile menu for small screens */}
             <HeaderMobileMenu />
         </header>
     );

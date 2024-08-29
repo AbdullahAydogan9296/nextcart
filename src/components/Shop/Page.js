@@ -9,7 +9,7 @@ import MobileFilters from './MobileFilters/MobileFilters';
 import Pagination from './Pagination/Pagination';
 import usePagination from './Pagination/hooks/usePagination';
 import Loading from '@/components/Loading/Loading';
-import { selectAllProducts, selectStatus, selectError } from '@/store/shopSlice';
+import { selectAllProducts, selectFilteredProducts, selectStatus, selectError } from '@/store/shopSlice';
 
 const Page = ({
     title,
@@ -24,7 +24,6 @@ const Page = ({
         setCurrentPage,
         rowsPerPage,
         setRowsPerPage,
-        filteredProducts,
         setFilteredProducts,
         priceRange,
         setPriceRange,
@@ -38,6 +37,7 @@ const Page = ({
 
     // Accessing the product state from Redux store
     const allProducts = useSelector(selectAllProducts);
+    const filteredProducts = useSelector(selectFilteredProducts); // Use filtered products from Redux store
     const status = useSelector(selectStatus);
     const error = useSelector(selectError);
 

@@ -42,8 +42,6 @@ export const fetchProductsByCategory = createAsyncThunk(
             const allProducts = await Promise.all(
                 categories.map(async (category) => {
                     const response = await fetchWithRetry(`https://dummyjson.com/products/category/${category}`);
-
-                    // Check if response is not okay
                     if (!response.ok) {
                         throw new Error(`Failed to fetch products for category: ${category}`);
                     }
@@ -75,8 +73,6 @@ export const fetchAllProducts = createAsyncThunk(
             const allProducts = await Promise.all(
                 categories.map(async (category) => {
                     const response = await fetchWithRetry(`https://dummyjson.com/products/category/${category}`);
-
-                    // Check if response is not okay
                     if (!response.ok) {
                         throw new Error(`Failed to fetch products for category: ${category}`);
                     }
@@ -99,10 +95,18 @@ const shopSlice = createSlice({
     name: 'shop',
     initialState: {
         products: [], // Initial state for products
+        filteredProducts: [], // State for filtered products, used for search functionality
         status: 'idle', // Initial status is idle
         error: null // No error initially
     },
-    reducers: {},
+    reducers: {
+        // Reducer to handle search functionality
+        searchProducts: (state, action) => {
+            state.filteredProducts = state.products.filter((product) =>
+                product.title.toLowerCase().includes(action.payload.toLowerCase())
+            );
+        },
+    },
     extraReducers: (builder) => {
         builder
             // Handle pending state for fetching products by category
@@ -113,6 +117,7 @@ const shopSlice = createSlice({
             .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.products = action.payload;
+                state.filteredProducts = action.payload; // Initialize filtered products
             })
             // Handle rejected state for fetching products by category
             .addCase(fetchProductsByCategory.rejected, (state, action) => {
@@ -127,6 +132,7 @@ const shopSlice = createSlice({
             .addCase(fetchAllProducts.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.products = action.payload;
+                state.filteredProducts = action.payload; // Initialize filtered products
             })
             // Handle rejected state for fetching all products
             .addCase(fetchAllProducts.rejected, (state, action) => {
@@ -138,7 +144,11 @@ const shopSlice = createSlice({
 
 // Selector functions to get products, status, and error from the state
 export const selectAllProducts = (state) => state.shop.products;
+export const selectFilteredProducts = (state) => state.shop.filteredProducts; // Selector for filtered products
 export const selectStatus = (state) => state.shop.status;
 export const selectError = (state) => state.shop.error;
+
+// Export the search action
+export const { searchProducts } = shopSlice.actions;
 
 export default shopSlice.reducer;
