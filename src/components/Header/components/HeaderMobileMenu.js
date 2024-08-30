@@ -37,7 +37,7 @@ export default function HeaderMobileMenu() {
 
     return (
         <>
-            {/* Mobile menu button (hamburger icon) */}
+            {/* Mobile menu button */}
             <div ref={menuButtonRef} className="md:hidden">
                 <button onClick={toggleMenu}>
                     <Image

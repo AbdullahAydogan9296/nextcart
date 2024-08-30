@@ -8,7 +8,7 @@ import { fetchProductsByCategory } from '@/store/shopSlice';
 const MensFashionPage = () => {
     return (
         <Page
-            title="Shop Page"
+            title="Men&apos;s Fashion"
             useShopPageHook={useMensFashionPage}
             fetchProductsByCategory={(categories) => {
                 if (categories && categories.length > 0) {

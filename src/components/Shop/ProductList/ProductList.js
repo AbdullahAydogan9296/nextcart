@@ -3,17 +3,16 @@ import ProductCard from './components/ProductCard';
 import NoProductsFound from './components/NoProductsFound';
 
 const ProductList = ({ products }) => {
-    // Check if there are no products to display
+    // Check if products array is empty or undefined
     if (!products || products.length === 0) {
-        // Render the NoProductsFound component if no products are available
-        return <NoProductsFound />;
+        return <NoProductsFound />; // Show NoProductsFound component if no products
     }
 
-    // Render the list of products using the ProductCard component
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        // Render product grid
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
-                // Render a ProductCard for each product in the products array
+                // Render a ProductCard for each product
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>

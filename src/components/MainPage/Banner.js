@@ -6,13 +6,12 @@ import { useRouter } from 'next/navigation';
 const BannerSection = () => {
     const router = useRouter();
 
-    // Function to handle button click and navigate to the Shop page
+    // Navigate to the shop page when the button is clicked
     const handleShopNowClick = () => {
         router.push('/shop');
     };
 
     return (
-        // Banner section with promotional content
         <section className="banner flex items-center justify-center bg-gray-100 p-10 rounded-lg overflow-hidden">
             <div className="flex items-center max-w-7xl mx-auto">
                 {/* Promotional text and button */}
@@ -22,7 +21,7 @@ const BannerSection = () => {
                     <p className="mb-4">Starting from: $59.99</p>
                     <button
                         className="bg-black text-white px-6 py-3 rounded-md"
-                        onClick={handleShopNowClick}
+                        onClick={handleShopNowClick} // Trigger navigation on button click
                     >
                         Shop now
                     </button>

@@ -21,13 +21,13 @@ export default function Header() {
             {/* Logo component */}
             <HeaderLogo />
 
-            {/* Search bar component with search handler passed as a prop */}
+            {/* Search bar component */}
             <HeaderSearchBar onSearch={handleSearch} />
 
-            {/* Icons for user actions (like cart, profile) */}
+            {/* Header Icons */}
             <HeaderIcons />
 
-            {/* Mobile menu for small screens */}
+            {/* Mobile menu */}
             <HeaderMobileMenu />
         </header>
     );
