@@ -1,52 +1,54 @@
 import { useState, useEffect } from 'react';
-import { fetchAllProducts } from '@/store/shopSlice';
-import { useDispatch } from 'react-redux';
+import { fetchAllProducts, selectAllProducts } from '@/store/shopSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function useShopPage(categories) {
-    const dispatch = useDispatch(); // Initialize Redux dispatch
+    const dispatch = useDispatch();
+    const allProducts = useSelector(selectAllProducts);
 
-    // States to manage pagination, filtering, sorting, and screen size
+    // States to handle pagination, filtering, sorting, and mobile view detection
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [priceRange, setPriceRange] = useState({ minPrice: 0, maxPrice: Infinity });
     const [sortOrder, setSortOrder] = useState('default');
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [isMobile, setIsMobile] = useState(false); // State to detect mobile view
+    const [isMobile, setIsMobile] = useState(false);
 
+    // Effect to detect screen resize and update mobile view state
     useEffect(() => {
         if (!categories || !Array.isArray(categories)) {
-            console.error('Categories data is missing or invalid.'); // Handle missing or invalid categories
+            console.error('Categories data is missing or invalid.');
             return;
         }
 
-        setIsMobile(window.innerWidth < 768); // Set initial mobile state
+        setIsMobile(window.innerWidth < 768); // Check if mobile view
 
         const handleResize = () => {
             const wasMobile = isMobile;
             const isNowMobile = window.innerWidth < 768;
             setIsMobile(isNowMobile);
 
+            // Reset filters when switching from mobile to desktop
             if (wasMobile && !isNowMobile) {
-                resetFilters(); // Reset filters when switching from mobile to desktop
+                resetFilters();
             }
         };
 
-        window.addEventListener('resize', handleResize); // Listen for window resize
+        window.addEventListener('resize', handleResize);
 
         return () => {
-            window.removeEventListener('resize', handleResize); // Cleanup on unmount
+            window.removeEventListener('resize', handleResize);
         };
     }, [isMobile, categories]);
 
+    // Function to reset all filters and fetch all products
     const resetFilters = () => {
-        // Reset all filters and sort orders
         setSelectedCategories([]);
         setPriceRange({ minPrice: 0, maxPrice: Infinity });
         setSortOrder('default');
         setRowsPerPage(9);
 
-        // Fetch products again after resetting filters
         if (categories && Array.isArray(categories)) {
             dispatch(fetchAllProducts(categories.map(category => category[0])))
                 .unwrap()
@@ -56,8 +58,8 @@ export default function useShopPage(categories) {
         }
     };
 
+    // Fetch all products when categories change
     useEffect(() => {
-        // Fetch all products when categories are available
         if (categories && categories.length > 0) {
             dispatch(fetchAllProducts(categories.map(category => category[0])))
                 .unwrap()
@@ -66,6 +68,32 @@ export default function useShopPage(categories) {
                 });
         }
     }, [dispatch, categories]);
+
+    // Effect to filter products by price range and sort order
+    useEffect(() => {
+        if (!allProducts || !Array.isArray(allProducts)) {
+            console.error('All products data is missing or invalid.');
+            return;
+        }
+
+        // Filter products by price range
+        let filtered = allProducts.filter(
+            (product) =>
+                product.price >= priceRange.minPrice &&
+                product.price <= priceRange.maxPrice
+        );
+
+        // Sort products based on the selected order
+        if (sortOrder === 'priceLowHigh') {
+            filtered.sort((a, b) => a.price - b.price);
+        } else if (sortOrder === 'priceHighLow') {
+            filtered.sort((a, b) => b.price - a.price);
+        }
+
+        setFilteredProducts(filtered);
+
+        console.log("Filtered Products after applying price range and sort:", filtered);
+    }, [allProducts, priceRange, sortOrder, setFilteredProducts]);
 
     return {
         dispatch,

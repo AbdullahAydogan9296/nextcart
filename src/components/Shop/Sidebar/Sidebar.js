@@ -4,24 +4,22 @@ import PriceRange from './components/PriceRange';
 import SortOrder from './components/SortOrder';
 
 const Sidebar = ({ categories, onSelectCategory, onPriceRangeChange, onSortChange }) => {
-    // State management for selected categories
+    // State to manage selected categories
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-    // State management for price range
+    // State for price range
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState('');
 
-    // State management for sorting order
+    // State for sort order
     const [sortOrder, setSortOrder] = useState('default');
 
-    // Handle category selection changes
+    // Handle category selection and deselection
     const handleCategoryChange = (category) => {
         let updatedCategories;
         if (selectedCategories.includes(category)) {
-            // Remove the category if it is already selected
             updatedCategories = selectedCategories.filter((c) => c !== category);
         } else {
-            // Add the category if it is not selected
             updatedCategories = [...selectedCategories, category];
         }
         setSelectedCategories(updatedCategories);
@@ -32,13 +30,13 @@ const Sidebar = ({ categories, onSelectCategory, onPriceRangeChange, onSortChang
         onSelectCategory(selectedCategories);
     };
 
-    // Handle changes in price range and apply filters
+    // Apply price range filter
     const handlePriceChange = () => {
-        const max = maxPrice === '' ? Infinity : Number(maxPrice);
+        const max = maxPrice === '' ? Infinity : Number(maxPrice); // Handle empty max price
         onPriceRangeChange({ minPrice, maxPrice: max });
     };
 
-    // Handle changes in sorting order and apply the sort
+    // Apply sort order filter
     const handleSortChange = (order) => {
         setSortOrder(order);
         onSortChange(order);
@@ -46,7 +44,7 @@ const Sidebar = ({ categories, onSelectCategory, onPriceRangeChange, onSortChang
 
     return (
         <div className="p-4 hidden md:block lg:block">
-            {/* Category selection component */}
+            {/* Category List with selected categories */}
             <CategoryList
                 categories={categories}
                 selectedCategories={selectedCategories}
@@ -54,7 +52,7 @@ const Sidebar = ({ categories, onSelectCategory, onPriceRangeChange, onSortChang
                 handleApplyFilters={handleApplyFilters}
             />
 
-            {/* Price range filter component */}
+            {/* Price Range input */}
             <PriceRange
                 minPrice={minPrice}
                 maxPrice={maxPrice}
@@ -63,7 +61,7 @@ const Sidebar = ({ categories, onSelectCategory, onPriceRangeChange, onSortChang
                 handlePriceChange={handlePriceChange}
             />
 
-            {/* Sort order component */}
+            {/* Sort order input */}
             <SortOrder
                 sortOrder={sortOrder}
                 handleSortChange={handleSortChange}

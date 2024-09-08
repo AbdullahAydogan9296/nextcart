@@ -9,14 +9,13 @@ import MobileFilters from './MobileFilters/MobileFilters';
 import Pagination from './Pagination/Pagination';
 import usePagination from './Pagination/hooks/usePagination';
 import Loading from '@/components/Loading/Loading';
-import { selectAllProducts, selectFilteredProducts, selectStatus, selectError } from '@/store/shopSlice';
+import { selectFilteredProducts, selectStatus, selectError } from '@/store/shopSlice';
 
 const Page = ({
     title,
     useShopPageHook,
     fetchProductsByCategory,
 }) => {
-    // Destructuring state and functions from custom hook
     const {
         dispatch,
         categories,
@@ -24,6 +23,7 @@ const Page = ({
         setCurrentPage,
         rowsPerPage,
         setRowsPerPage,
+        filteredProducts,
         setFilteredProducts,
         priceRange,
         setPriceRange,
@@ -35,13 +35,10 @@ const Page = ({
         resetFilters
     } = useShopPageHook();
 
-    // Accessing the product state from Redux store
-    const allProducts = useSelector(selectAllProducts);
-    const filteredProducts = useSelector(selectFilteredProducts); // Use filtered products from Redux store
     const status = useSelector(selectStatus);
     const error = useSelector(selectError);
 
-    // Handle category selection
+    // Function to handle category selection
     const onSelectCategory = (selectedCategories) => {
         if (!categories || !Array.isArray(categories) || selectedCategories.length === 0) {
             console.error('Categories data is missing, invalid, or no category selected.');
@@ -52,20 +49,19 @@ const Page = ({
         dispatch(fetchProductsByCategory(selectedCategories))
             .unwrap()
             .then(() => {
-                // Reset pagination to the first page after category change
-                setCurrentPage(1);
+                setCurrentPage(1); // Reset pagination on category change
             })
             .catch(err => {
                 console.error('Failed to fetch products by category:', err);
             });
     };
 
-    // Handle price range filter change
+    // Function to handle price range changes
     const onPriceRangeChange = ({ minPrice, maxPrice }) => {
         setPriceRange({ minPrice, maxPrice });
     };
 
-    // Handle sort order change
+    // Function to handle sort order changes
     const onSortChange = (order) => {
         setSortOrder(order);
     };
@@ -74,24 +70,7 @@ const Page = ({
     const totalPages = Math.ceil(filteredProducts.length / rowsPerPage);
     const { pageNumbers, hasNextPage, hasPrevPage } = usePagination(totalPages, currentPage);
 
-    // Filter products based on price range and sort order
-    useEffect(() => {
-        let filtered = allProducts.filter(
-            (product) =>
-                product.price >= priceRange.minPrice &&
-                product.price <= priceRange.maxPrice
-        );
-
-        if (sortOrder === 'priceLowHigh') {
-            filtered.sort((a, b) => a.price - b.price);
-        } else if (sortOrder === 'priceHighLow') {
-            filtered.sort((a, b) => b.price - a.price);
-        }
-
-        setFilteredProducts(filtered);
-    }, [allProducts, priceRange, sortOrder]);
-
-    // Fetch products when categories change
+    // Fetch products by categories when the component mounts
     useEffect(() => {
         if (categories.length === 0) {
             console.error('No categories provided.');
@@ -104,34 +83,32 @@ const Page = ({
             });
     }, [dispatch, categories]);
 
-    // Display loading state
+    // Show loading component while fetching data
     if (status === 'loading') {
         return <Loading />;
     }
 
-    // Display error state
+    // Show error message if fetching data fails
     if (status === 'failed') {
         return <div>Error: {error || "Failed to load products. Please try again."}</div>;
     }
 
-    // Check if categories are provided
+    // Show error if no categories are available
     if (categories.length === 0) {
         return <div>Error: No categories provided</div>;
     }
 
-    // Determine products to display based on pagination
+    // Slice filtered products for pagination
     const displayedProducts = filteredProducts.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
     return (
         <>
-            {/* Page head component for SEO */}
             <Head>
                 <title>{title}</title>
             </Head>
 
-            {/* Main layout for the shop page */}
             <div className="flex">
-                {/* Sidebar for category, price, and sort filters */}
+                {/* Sidebar for filters */}
                 <Sidebar
                     categories={categories}
                     onSelectCategory={onSelectCategory}
@@ -140,9 +117,8 @@ const Page = ({
                     className="sidebar-container"
                 />
 
-                {/* Main content area */}
                 <div className="flex-grow p-4">
-                    {/* Mobile filters displayed only on small screens */}
+                    {/* Mobile filters */}
                     {isMobile && (
                         <MobileFilters
                             rowsPerPage={rowsPerPage}
@@ -154,10 +130,10 @@ const Page = ({
                         />
                     )}
 
-                    {/* Product list component */}
+                    {/* Product list */}
                     <ProductList products={displayedProducts} />
 
-                    {/* Pagination component */}
+                    {/* Pagination controls */}
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
