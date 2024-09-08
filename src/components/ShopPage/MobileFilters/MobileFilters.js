@@ -4,7 +4,7 @@ import RowsPerPageSelect from './components/RowsPerPageSelect';
 import CategorySelect from './components/CategorySelect';
 import PriceRangeFilter from './components/PriceRangeFilter';
 import SortOrderFilter from './components/SortOrderFilter';
-import useMobileFilters from './hooks/useMobileFilters';
+import useMobileFilters from '../../../hooks/useMobileFilters';
 
 export default function MobileFilters({ rowsPerPage, setRowsPerPage, categories, onSelectCategory, onPriceRangeChange, onSortChange }) {
     // Using the custom hook to manage the filter states and handlers

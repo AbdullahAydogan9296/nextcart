@@ -4,8 +4,8 @@ import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { selectAllProducts } from '@/store/shopSlice';
 import { useEffect, useState } from 'react';
-import Loading from '@/components/Loading/Loading';
-import NoProductsFound from '@/components/Shop/ProductList/components/NoProductsFound';
+import Loading from '@/components/LoadingPage/Loading';
+import NoProductsFound from '@/components/ShopPage/ProductList/components/NoProductsFound';
 import ProductImageSection from '@/components/ProductPage/ProductImageSection';
 import ProductDetailsSection from '@/components/ProductPage/ProductDetailsSection';
 

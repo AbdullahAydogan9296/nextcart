@@ -1,6 +1,6 @@
 import React from 'react';
-import ImageComponent from '@/components/About/ImageComponent';
-import TextContent from '@/components/About/TextContent';
+import ImageComponent from '@/components/AboutPage/ImageComponent';
+import TextContent from '@/components/AboutPage/TextContent';
 
 const AboutUs = () => {
     return (

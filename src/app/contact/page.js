@@ -1,6 +1,6 @@
 import React from 'react';
-import ContactInfo from '@/components/Contact/ContactInfo';
-import AdditionalInfo from '@/components/Contact/AdditionalInfo';
+import ContactInfo from '@/components/ContactPage/ContactInfo';
+import AdditionalInfo from '@/components/ContactPage/AdditionalInfo';
 
 const ContactPage = () => {
     return (

@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser, loginAsGuest, clearErrorMessage } from '@/store/userSlice';
 import { useRouter } from 'next/navigation';
-import FormHeader from '@/components/LoginAndRegister/FormHeader';
-import ErrorMessage from '@/components/LoginAndRegister/ErrorMessage';
-import InputField from '@/components/LoginAndRegister/InputField';
-import SubmitButton from '@/components/LoginAndRegister/SubmitButton';
+import FormHeader from '@/components/LoginAndRegisterPage/FormHeader';
+import ErrorMessage from '@/components/LoginAndRegisterPage/ErrorMessage';
+import InputField from '@/components/LoginAndRegisterPage/InputField';
+import SubmitButton from '@/components/LoginAndRegisterPage/SubmitButton';
 
 const Register = () => {
     const dispatch = useDispatch();

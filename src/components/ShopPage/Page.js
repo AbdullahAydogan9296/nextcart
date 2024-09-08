@@ -7,8 +7,8 @@ import Sidebar from './Sidebar/Sidebar';
 import ProductList from './ProductList/ProductList';
 import MobileFilters from './MobileFilters/MobileFilters';
 import Pagination from './Pagination/Pagination';
-import usePagination from './Pagination/hooks/usePagination';
-import Loading from '@/components/Loading/Loading';
+import usePagination from '../../hooks/usePagination';
+import Loading from '@/components/LoadingPage/Loading';
 import { selectFilteredProducts, selectStatus, selectError } from '@/store/shopSlice';
 
 const Page = ({

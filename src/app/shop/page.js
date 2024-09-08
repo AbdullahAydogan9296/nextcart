@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Page from '@/components/Shop/Page';
-import useMainShopPage from './hooks/useMainShopPage';
+import Page from '@/components/ShopPage/Page';
+import useMainShopPage from '@/hooks/ShopPage/useMainShopPage';
 import { fetchAllProducts } from '@/store/shopSlice';
 
 const ShopPage = () => {

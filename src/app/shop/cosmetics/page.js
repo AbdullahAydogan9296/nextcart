@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Page from '@/components/Shop/Page';
-import useCosmeticsPage from './hooks/useCosmeticsPage';
+import Page from '@/components/ShopPage/Page';
+import useCosmeticsPage from '@/hooks/ShopPage/useCosmeticsPage';
 import { fetchProductsByCategory } from '@/store/shopSlice';
 
 const CosmeticsPage = () => {

@@ -1,4 +1,4 @@
-export const categories = [
+export const womensFashionCategories = [
     ["womens-bags", "Women's Bags"],
     ["womens-dresses", "Women's Dresses"],
     ["womens-jewellery", "Women's Jewellery"],

@@ -2,7 +2,7 @@ import React from 'react';
 import PreviousButton from './components/PreviousButton';
 import NextButton from './components/NextButton';
 import PageNumbers from './components/PageNumbers';
-import { calculatePages } from './utils/CalculatePages';
+import { calculatePages } from '../../../utils/CalculatePages';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     // Calculate the pages to display using the calculatePages utility function
