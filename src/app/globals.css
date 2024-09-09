@@ -15,16 +15,17 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 17, 24, 39;
-    --background-end-rgb: 17, 24, 39;
+    --background-start-rgb: 255, 255, 255;
+    /* Updated to keep it white in dark mode */
+    --background-end-rgb: 255, 255, 255;
+    /* Updated to keep it white in dark mode */
   }
 }
 
 body {
   color: rgb(var(--body-text-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb)));
+  background-color: rgb(var(--background-end-rgb));
+  /* Removed gradient and made it a solid color */
 }
 
 @layer utilities {

@@ -7,7 +7,6 @@ import SortOrderFilter from './components/SortOrderFilter';
 import useMobileFilters from '../../../hooks/useMobileFilters';
 
 export default function MobileFilters({ rowsPerPage, setRowsPerPage, categories, onSelectCategory, onPriceRangeChange, onSortChange }) {
-    // Using the custom hook to manage the filter states and handlers
     const {
         isFiltersOpen,
         selectedCategory,
@@ -24,13 +23,12 @@ export default function MobileFilters({ rowsPerPage, setRowsPerPage, categories,
 
     return (
         <div className="md:hidden lg:hidden mb-4 flex flex-col">
-            {/* Filter toggle button and rows per page selector */}
             <div className="flex justify-between items-center">
+                {/* Ensure rowsPerPage is passed and used correctly */}
                 <FiltersToggleButton toggleFilters={toggleFilters} />
                 <RowsPerPageSelect rowsPerPage={rowsPerPage} setRowsPerPage={setRowsPerPage} />
             </div>
 
-            {/* Conditional rendering of the filter section */}
             {isFiltersOpen && (
                 <div className="mt-4 bg-white border border-gray-300 rounded-lg p-4">
                     <CategorySelect
