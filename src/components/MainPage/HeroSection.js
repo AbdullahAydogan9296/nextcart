@@ -3,7 +3,6 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-// Define the path to the background image
 const HeroBg = '/hero-bg.svg';
 
 const HeroSection = () => {
@@ -15,10 +14,9 @@ const HeroSection = () => {
     };
 
     return (
-        // Hero section with background image and responsive sizing
         <section
-            className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
-            style={{ backgroundImage: `url(${HeroBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+            className="relative flex items-center justify-center h-[300px] md:h-[450px] lg:h-[600px] bg-cover bg-center"
+            style={{ backgroundImage: `url(${HeroBg})`, backgroundSize: 'cover' }}
         >
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
