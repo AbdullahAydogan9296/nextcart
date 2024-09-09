@@ -7,7 +7,7 @@ import Sidebar from './Sidebar/Sidebar';
 import ProductList from './ProductList/ProductList';
 import MobileFilters from './MobileFilters/MobileFilters';
 import Pagination from './Pagination/Pagination';
-import usePagination from '../../hooks/usePagination';
+import usePagination from '@/hooks/usePagination';
 import Loading from '@/components/LoadingPage/Loading';
 import { selectFilteredProducts, selectStatus, selectError } from '@/store/shopSlice';
 
@@ -23,8 +23,6 @@ const Page = ({
         setCurrentPage,
         rowsPerPage,
         setRowsPerPage,
-        filteredProducts,
-        setFilteredProducts,
         priceRange,
         setPriceRange,
         sortOrder,
@@ -35,6 +33,7 @@ const Page = ({
         resetFilters
     } = useShopPageHook();
 
+    const filteredProducts = useSelector(selectFilteredProducts); // Get filtered products from Redux store
     const status = useSelector(selectStatus);
     const error = useSelector(selectError);
 

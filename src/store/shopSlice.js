@@ -4,25 +4,22 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const fetchWithRetry = async (url, options = {}, retries = 3) => {
     try {
         const response = await fetch(url, options);
-        // Check if response is not okay (e.g., status 404 or 500)
+        // Retry if response is not OK
         if (!response.ok) {
-            // Retry if retries are still available
             if (retries > 0) {
                 console.warn(`Retrying... (${3 - retries + 1})`);
                 return await fetchWithRetry(url, options, retries - 1);
             } else {
-                // Throw error after exhausting retries
                 throw new Error(`Failed after 3 retries: ${response.statusText}`);
             }
         }
         return response;
     } catch (error) {
-        // Retry if a network error occurs and retries are available
+        // Retry in case of error, unless retries are exhausted
         if (retries > 0) {
             console.warn(`Retrying... (${3 - retries + 1})`);
             return await fetchWithRetry(url, options, retries - 1);
         } else {
-            // Throw error after exhausting retries
             throw error;
         }
     }
@@ -33,25 +30,22 @@ export const fetchProductsByCategory = createAsyncThunk(
     'shop/fetchProductsByCategory',
     async (categories, { rejectWithValue }) => {
         try {
-            // Check if categories array is valid
+            // Check if valid categories array is provided
             if (!categories || !Array.isArray(categories) || categories.length === 0) {
                 throw new Error('No categories provided');
             }
-
-            // Fetch products for each category using the retry mechanism
+            // Fetch products for each category
             const allProducts = await Promise.all(
                 categories.map(async (category) => {
                     const response = await fetchWithRetry(`https://dummyjson.com/products/category/${category}`);
                     if (!response.ok) {
                         throw new Error(`Failed to fetch products for category: ${category}`);
                     }
-
                     const data = await response.json();
                     return data.products;
                 })
             );
-            // Flatten the array of product arrays into a single array
-            return allProducts.flat();
+            return allProducts.flat(); // Combine all fetched products into a single array
         } catch (error) {
             console.error('Error fetching products by category:', error);
             return rejectWithValue(error.message || 'An unknown error occurred while fetching products');
@@ -64,25 +58,22 @@ export const fetchAllProducts = createAsyncThunk(
     'shop/fetchAllProducts',
     async (categories, { rejectWithValue }) => {
         try {
-            // Check if categories array is valid
+            // Check if valid categories array is provided
             if (!categories || !Array.isArray(categories) || categories.length === 0) {
                 throw new Error('No categories provided');
             }
-
-            // Fetch products for each category using the retry mechanism
+            // Fetch products for each category
             const allProducts = await Promise.all(
                 categories.map(async (category) => {
                     const response = await fetchWithRetry(`https://dummyjson.com/products/category/${category}`);
                     if (!response.ok) {
                         throw new Error(`Failed to fetch products for category: ${category}`);
                     }
-
                     const data = await response.json();
                     return data.products;
                 })
             );
-            // Flatten the array of product arrays into a single array
-            return allProducts.flat();
+            return allProducts.flat(); // Combine all fetched products into a single array
         } catch (error) {
             console.error('Error fetching all products:', error);
             return rejectWithValue(error.message || 'An unknown error occurred while fetching products');
@@ -90,65 +81,79 @@ export const fetchAllProducts = createAsyncThunk(
     }
 );
 
-// Redux slice for shop state management
+// Redux slice for managing the shop state
 const shopSlice = createSlice({
     name: 'shop',
     initialState: {
-        products: [], // Initial state for products
-        filteredProducts: [], // State for filtered products, used for search functionality
-        status: 'idle', // Initial status is idle
-        error: null // No error initially
+        products: [], // Array to hold all products
+        filteredProducts: [], // Array to hold filtered products
+        status: 'idle', // Tracks loading status
+        error: null, // Holds error messages if any
+        cart: [] // Holds items added to the cart
     },
     reducers: {
-        // Reducer to handle search functionality
+        // Reducer to filter products based on search term
         searchProducts: (state, action) => {
             state.filteredProducts = state.products.filter((product) =>
                 product.title.toLowerCase().includes(action.payload.toLowerCase())
             );
         },
+        // Reducer to clear the cart
+        clearCart: (state) => {
+            state.cart = [];
+        },
+        // Reducer to add an item to the cart
+        addToCart: (state, action) => {
+            const existingItem = state.cart.find(item => item.id === action.payload.id);
+            if (existingItem) {
+                existingItem.quantity += action.payload.quantity; // Update quantity if item already exists
+            } else {
+                state.cart.push({ ...action.payload, quantity: action.payload.quantity || 1 }); // Add new item
+            }
+        },
+        // Reducer to remove an item from the cart by ID
+        removeFromCart: (state, action) => {
+            state.cart = state.cart.filter(item => item.id !== action.payload); // Remove item by ID
+        },
     },
     extraReducers: (builder) => {
         builder
-            // Handle pending state for fetching products by category
             .addCase(fetchProductsByCategory.pending, (state) => {
-                state.status = 'loading';
+                state.status = 'loading'; // Set status to loading while fetching
             })
-            // Handle fulfilled state for fetching products by category
             .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.products = action.payload;
+                state.status = 'succeeded'; // Set status to succeeded once data is fetched
+                state.products = action.payload; // Store fetched products
                 state.filteredProducts = action.payload; // Initialize filtered products
             })
-            // Handle rejected state for fetching products by category
             .addCase(fetchProductsByCategory.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload || 'Failed to load products by category';
+                state.status = 'failed'; // Set status to failed if there's an error
+                state.error = action.payload || 'Failed to load products by category'; // Store error message
             })
-            // Handle pending state for fetching all products
             .addCase(fetchAllProducts.pending, (state) => {
-                state.status = 'loading';
+                state.status = 'loading'; // Set status to loading while fetching
             })
-            // Handle fulfilled state for fetching all products
             .addCase(fetchAllProducts.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.products = action.payload;
+                state.status = 'succeeded'; // Set status to succeeded once data is fetched
+                state.products = action.payload; // Store fetched products
                 state.filteredProducts = action.payload; // Initialize filtered products
             })
-            // Handle rejected state for fetching all products
             .addCase(fetchAllProducts.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload || 'Failed to load all products';
+                state.status = 'failed'; // Set status to failed if there's an error
+                state.error = action.payload || 'Failed to load all products'; // Store error message
             });
     }
 });
 
-// Selector functions to get products, status, and error from the state
+// Selector functions to get specific parts of the state
 export const selectAllProducts = (state) => state.shop.products;
-export const selectFilteredProducts = (state) => state.shop.filteredProducts; // Selector for filtered products
+export const selectFilteredProducts = (state) => state.shop.filteredProducts;
 export const selectStatus = (state) => state.shop.status;
 export const selectError = (state) => state.shop.error;
+export const selectCartItems = (state) => state.shop.cart;
 
-// Export the search action
-export const { searchProducts } = shopSlice.actions;
+// Export the search action and other reducers
+export const { searchProducts, clearCart, addToCart, removeFromCart } = shopSlice.actions;
 
+// Export the reducer to be used in the Redux store
 export default shopSlice.reducer;

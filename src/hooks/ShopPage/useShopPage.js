@@ -1,28 +1,29 @@
 import { useState, useEffect } from 'react';
-import { fetchAllProducts, selectAllProducts } from '@/store/shopSlice';
+import { fetchAllProducts, selectAllProducts, selectCartItems } from '@/store/shopSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function useShopPage(categories) {
     const dispatch = useDispatch();
-    const allProducts = useSelector(selectAllProducts);
+    const allProducts = useSelector(selectAllProducts); // All available products from the store
+    const cartItems = useSelector(selectCartItems); // Cart items from the store
 
-    // States to handle pagination, filtering, sorting, and mobile view detection
-    const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(9);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [priceRange, setPriceRange] = useState({ minPrice: 0, maxPrice: Infinity });
-    const [sortOrder, setSortOrder] = useState('default');
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const [isMobile, setIsMobile] = useState(false);
+    // States for pagination, filtering, sorting, and mobile view detection
+    const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
+    const [rowsPerPage, setRowsPerPage] = useState(9); // Number of products per page
+    const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products based on filters
+    const [priceRange, setPriceRange] = useState({ minPrice: 0, maxPrice: Infinity }); // Price range filter
+    const [sortOrder, setSortOrder] = useState('default'); // Sort order for products
+    const [selectedCategories, setSelectedCategories] = useState([]); // Selected categories for filtering
+    const [isMobile, setIsMobile] = useState(false); // Flag for detecting mobile view
 
-    // Effect to detect screen resize and update mobile view state
+    // Effect to handle screen resizing and mobile view detection
     useEffect(() => {
         if (!categories || !Array.isArray(categories)) {
             console.error('Categories data is missing or invalid.');
             return;
         }
 
-        setIsMobile(window.innerWidth < 768); // Check if mobile view
+        setIsMobile(window.innerWidth < 768); // Set mobile view based on screen width
 
         const handleResize = () => {
             const wasMobile = isMobile;
@@ -42,13 +43,14 @@ export default function useShopPage(categories) {
         };
     }, [isMobile, categories]);
 
-    // Function to reset all filters and fetch all products
+    // Function to reset filters to their default values
     const resetFilters = () => {
         setSelectedCategories([]);
         setPriceRange({ minPrice: 0, maxPrice: Infinity });
         setSortOrder('default');
         setRowsPerPage(9);
 
+        // Fetch all products after resetting filters
         if (categories && Array.isArray(categories)) {
             dispatch(fetchAllProducts(categories.map(category => category[0])))
                 .unwrap()
@@ -69,7 +71,7 @@ export default function useShopPage(categories) {
         }
     }, [dispatch, categories]);
 
-    // Effect to filter products by price range and sort order
+    // Effect to filter and sort products based on price range, sort order, and cart status
     useEffect(() => {
         if (!allProducts || !Array.isArray(allProducts)) {
             console.error('All products data is missing or invalid.');
@@ -83,17 +85,24 @@ export default function useShopPage(categories) {
                 product.price <= priceRange.maxPrice
         );
 
-        // Sort products based on the selected order
+        // Sort products based on the selected sort order
         if (sortOrder === 'priceLowHigh') {
             filtered.sort((a, b) => a.price - b.price);
         } else if (sortOrder === 'priceHighLow') {
             filtered.sort((a, b) => b.price - a.price);
         }
 
+        // Check if products are in the cart and mark them accordingly
+        filtered = filtered.map((product) => {
+            const isInCart = cartItems.some(cartItem => cartItem.id === product.id);
+            return { ...product, isInCart };
+        });
+
+        // Update the filtered products state
         setFilteredProducts(filtered);
 
-        console.log("Filtered Products after applying price range and sort:", filtered);
-    }, [allProducts, priceRange, sortOrder, setFilteredProducts]);
+        console.log("Filtered Products after applying price range, sort, and cart status:", filtered);
+    }, [allProducts, priceRange, sortOrder, setFilteredProducts, cartItems]);
 
     return {
         dispatch,

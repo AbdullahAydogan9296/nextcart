@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Page from '@/components/ShopPage/Page';
-import useWomensFashionPage from '../../../hooks/ShopPage/useWomensFashionPage';
+import useWomensFashionPage from '@/hooks/ShopPage/useWomensFashionPage';
 import { fetchProductsByCategory } from '@/store/shopSlice';
 
 const WomensFashionPage = () => {
